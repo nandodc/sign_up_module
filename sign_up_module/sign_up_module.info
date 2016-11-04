@@ -1,0 +1,8 @@
+name = Sign up module
+description = users want to recieve updates from the web page.
+core = 7.x 
+package = Custom Modules 
+
+dependencies[] = block
+files[] = sign_up_module.module
+files[] = sign_up_module.install

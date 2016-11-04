@@ -1,0 +1,104 @@
+<?php
+
+/**
+ * @file
+ *
+ * This is the module file 
+ */
+
+
+/**
+ * Implements hook_help().
+ */
+function sign_up_module_help($path, $arg){
+	
+}
+
+/**
+ * Implements hook_block_info().
+ */
+function sign_up_module_block_info(){
+  $blocks['sign_up_module_block'] = array(
+    'info' => t('Sign up module'),
+    'cache' => DRUPAL_NO_CACHE
+  );
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function sign_up_module_block_view($block_name = '') {
+  if($block_name == 'sign_up_module_block'){
+		global $user;
+		global $base_path;
+
+		$path = drupal_get_path('module', 'sign_up_module');
+		drupal_add_css($path . '/css/sign_up_module_style.css');
+
+		$block['subject'] = 'Sign up to recieve our updates';
+		$block['content'] = drupal_get_form('sign_up_module_form');
+	}
+	return $block;
+}
+
+
+/**
+ * Implements hook_form().
+ */
+function sign_up_module_form($form, &$form_state) {
+  
+ $form['name'] = array(
+    '#type' => 'textfield', 
+    '#title' => 'Name',
+    '#size' => 10,
+    '#maxlength' => 255,
+    '#required' => TRUE,  
+  );
+
+  $form['surname'] = array(
+    '#type' => 'textfield', 
+    '#title' => 'Surname',
+    '#size' => 10,
+    '#maxlength' => 255,
+    '#required' => TRUE,  
+  );
+
+	$form['email'] = array(
+    '#type' => 'textfield', 
+    '#title' => 'Email',
+    '#size' => 10,
+    '#maxlength' => 255,
+    '#required' => TRUE,  
+  );
+  $form['submit_button'] = array(
+    '#type' => 'submit',
+    '#value' => t('Sign up!'),
+  );
+  
+  return $form;
+}
+
+/**
+ * Implements hook_form_validate().
+ */
+function sign_up_module_form_validate($form, &$form_state) {
+  // validation for email
+  if (!valid_email_address($form_state['values']['email'])) {
+   form_set_error('submitted][email_address', t('The email address appears to be invalid.'));
+   }
+}
+
+/**
+ * Implements hook_form_submit().
+ */
+function sign_up_module_form_submit($form, &$form_state) {
+  // ạfter pressing submit this hook will put the user data in the data base
+  db_insert('sign_up_module')
+    ->fields(array(
+      'name' => $form_state['values']['name'], 
+      'surname' => $form_state['values']['surname'],       
+      'email' => $form_state['values']['email'],       
+    ))->execute();
+    drupal_set_message("Thank yoy for your sign up!"); 
+}
