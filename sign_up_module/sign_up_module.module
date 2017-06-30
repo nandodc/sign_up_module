@@ -9,8 +9,9 @@
 
 /**
  * Implements hook_help().
+ * still needed to add some code here
  */
-function sign_up_module_help($path, $arg){
+function sign_up_module_help( $path, $arg ){
 	
 }
 
